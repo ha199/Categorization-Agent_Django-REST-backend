@@ -1,6 +1,6 @@
 from django.urls import path
-from views import categorize_transaction
+from api.views import categorize_transaction
 
 urlpatterns = [
-    path('api/categorize/', categorize_transaction, name='categorize'),
+    path("api/categorize/", categorize_transaction),
 ]
