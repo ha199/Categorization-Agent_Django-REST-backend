@@ -1,143 +1,264 @@
-# Simple Transaction Categorization API
 
-A minimal Django REST API that calls an LLM to categorize transactions.
+```markdown
+# 📊 AI-Powered Transaction Categorization API
 
-## What It Does
+## 📌 Overview
 
-1. You send: `{"description": "AWS invoice"}`
-2. It calls LLM (OpenAI or Mock)
-3. Returns: `{"category": "Cloud Infrastructure", "confidence": 0.95}`
+This project is a backend-only AI-powered transaction categorization service built using **Django REST Framework** and an **LLM (Google Gemini)**.
 
-That's it!
+The system automatically classifies financial transactions into predefined categories using contextual understanding from an LLM.
 
 ---
 
-## Setup (2 minutes)
+## 🚀 Features
 
-### 1. Install Dependencies
-```bash
-pip install -r requirements.txt
+- REST API built with Django
+- LLM-powered transaction classification
+- Structured JSON response
+- Deterministic output format
+- Clean service-based architecture
+- Simple test client for API validation
+
+---
+
+## 🏗️ Architecture
+
 ```
 
-### 2. Run Server
+Client (Postman / test.py)
+↓
+Django REST API (views.py)
+↓
+LLM Service Layer (llm.py)
+↓
+Google Gemini API
+↓
+Structured JSON Response
+
+```
+
+---
+
+## 📂 Project Structure
+
+```
+simple_categorizer/
+│
+├── manage.py
+├── settings.py
+├── urls.py
+├── test.py
+│
+├── api/
+│ ├── views.py # API endpoint
+│ ├── llm.py # LLM integration layer
+│ ├── __init__.py
+│
+└── .env # API keys (not committed)
+
+````
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/transaction-categorizer.git
+cd transaction-categorizer
+````
+
+---
+
+### 2. Create virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate:
+
+**Windows:**
+
+```bash
+.venv\Scripts\activate
+```
+
+---
+
+### 3. Install dependencies
+
+```bash
+pip install django djangorestframework google-generativeai python-dotenv
+```
+
+---
+
+### 4. Configure environment variables
+
+Create a `.env` file in root:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+---
+
+### 5. Run migrations (if required)
+
+```bash
+python manage.py migrate
+```
+
+---
+
+### 6. Start server
+
 ```bash
 python manage.py runserver
 ```
 
-You should see:
-```
-Starting development server at http://127.0.0.1:8000/
-```
+Server runs at:
 
-### 3. Test It (New Terminal)
-```bash
-python test.py
+```
+http://127.0.0.1:8000/
 ```
 
 ---
 
-## API Endpoint
+## 📡 API Endpoint
 
-### POST `/api/categorize/`
+### 🔹 Categorize Transaction
 
-**Request:**
-```json
-{
-  "description": "AWS invoice for cloud services"
-}
+```
+POST /api/categorize/
 ```
 
-**Response:**
+---
+
+### 📥 Request Body
+
 ```json
 {
-  "success": true,
-  "description": "AWS invoice for cloud services",
-  "category": "Cloud Infrastructure",
-  "confidence": 0.95
+  "description": "AWS cloud invoice for production servers"
 }
 ```
 
 ---
 
-## Configuration
+### 📤 Response
 
-### Option 1: Use Mock (No API Key Needed) ✅
-Edit `.env`:
+```json
+{
+  "predicted_category": "Cloud Infrastructure",
+  "confidence_score": 0.95,
+  "explanation": "AWS is a cloud service provider used for infrastructure"
+}
 ```
-LLM_PROVIDER=mock
-LLM_API_KEY=
+<img width="1795" height="926" alt="image" src="https://github.com/user-attachments/assets/156e158f-4404-42d2-86c6-dc589e5ef297" />
+
+
+## 🧪 Testing the API
+
+### Option 1: Postman
+
+1. Open Postman
+2. Create new request
+3. Method: `POST`
+4. URL:
+
+```
+http://127.0.0.1:8000/api/categorize/
 ```
 
-Run and test immediately!
+5. Body → raw → JSON:
 
-### Option 2: Use OpenAI
-Edit `.env`:
+```json
+{
+  "description": "Microsoft 365 subscription payment"
+}
 ```
-LLM_PROVIDER=openai
-LLM_API_KEY=sk-your-api-key-here
-```
+
+6. Click **Send**
 
 ---
 
-## Valid Categories
+### Option 2: Python Test Script
 
-- Office Supplies
-- Cloud Infrastructure
-- Salaries
-- Utilities
-- Travel
-- Software
-- Equipment
-- Miscellaneous
+Run:
 
----
-
-## Files
-
-- `settings.py` - Django config
-- `urls.py` - API route
-- `views.py` - API endpoint (80 lines)
-- `llm_helper.py` - LLM integration (40 lines)
-- `test.py` - Test script
-
-**Total: ~150 lines of code**
-
----
-
-## Example Usage
-
-### Using curl:
-```bash
-curl -X POST http://localhost:8000/api/categorize/ \
-  -H "Content-Type: application/json" \
-  -d '{"description": "AWS invoice for cloud services"}'
-```
-
-### Using Python:
-```python
-import requests
-
-response = requests.post(
-    'http://localhost:8000/api/categorize/',
-    json={'description': 'AWS invoice for cloud services'}
-)
-
-print(response.json())
-```
-
----
-
-## Testing
-
-Run the test script:
 ```bash
 python test.py
 ```
 
-It will test 5 transactions and show results.
+This script sends multiple sample transactions and prints categorized results.
 
 ---
 
-## That's It!
+## 📊 Sample Categories
 
-Simple, clean, exactly what was asked for.
+The system classifies transactions into:
+
+* Cloud Infrastructure
+* Office Supplies
+* Salaries
+* Utilities
+* Software
+* Travel
+* Miscellaneous
+
+---
+
+## 🧠 Design Decisions
+
+* LLM used for semantic classification (no training required)
+* Strict JSON output enforced for consistency
+* Lightweight architecture (no database, no vector store)
+* Service layer separation for scalability
+
+---
+
+## ❗ Notes
+
+* No database is used (as per assignment scope)
+* No model training is required
+* LLM fallback logic is used if API fails
+* Designed for simplicity and clarity
+
+---
+
+## 👨‍💻 Tech Stack
+
+* Python
+* Django
+* Django REST Framework
+* Google Gemini API
+* dotenv
+
+---
+
+## 📌 Author
+
+Built as a backend engineering exercise for AI-powered transaction classification.
+
+---
+
+## ✅ Status
+
+✔ Working API
+✔ LLM integration
+✔ Structured output
+✔ Testable via Postman / script
+
+```
+
+
+✔ Resume bullet points from this project  
+✔ Or polish GitHub repo to look production-grade  
+
+Just tell 👍
+```
+
+
+
+
